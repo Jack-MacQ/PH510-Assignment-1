@@ -9,7 +9,6 @@
 #SBATCH --job-name=bad_code      # Job name
 #SBATCH --output=bad_code.out    # Output file name
 
-module load python
 module load mpi
 
 # Exit immediately on errors, undefined variables, or pipeline failures
@@ -39,15 +38,27 @@ for P in $NPROCS; do
 	export N=$N
 	
 	# Runs program and measures runtime
-	RESULT=$(/usr/bin/time -f "%e" srun -n $P python 3 $badcode 2>&1)
+	RESULT=$(/usr/bin/time -f "%e" srun -n $P python3 $badcode 2>&1)
 	
 	# Extract the last line of "RESULT" (runtime in seconds)
 	TIME=$(echo "$RESULT" | tail -n 1)
 	
 	# Find line containing "Intergral" in RESULT and extract result
 	INTEGRAL=$(echo "$RESULT" | grep Integral | awk '{print $2}')
+	if [ -z "${INTEGRAL}" ]; then
+		INTEGRAL="NA"
+	fi
 	
 	#Print results and align with table headings
 	printf "%-8s %-11s %-12s %-10s\n" "$P" "$N" "$TIME" "$INTEGRAL"
-
+	
+	# If run fails, print the error output
+	if [ "$RC" -ne 0 ]; then
+		echo "-------------------------------------------------"
+		echo " Run failed for P=$P (exit code $RC). Output was:"
+		echo " $RESULT"
+		echo "-------------------------------------------------"
+	
+		break     # Stop after first failure
+	fi
 done
