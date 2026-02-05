@@ -1,31 +1,21 @@
 #!/bin/bash
 
-# Submit to teaching partition
-#SBATCH --partition=teaching
+#SBATCH --partition=teaching     # Submit to teaching partition
+#SBATCH --account=teaching       # Specify project account
+#SBATCH --nodes=1                # Request one node
+#SBATCH --ntasks-per-node=16     # Number of tasks per node
+#SBATCH --cpus-per-task=1        # Allocate one core per task
+#SBATCH --time=01:00:00          # Maximum runtime	
+#SBATCH --job-name=bad_code      # Job name
+#SBATCH --output=bad_code.out    # Output file name
 
-# Specify project account
-#SBATCH --account=teaching
-
-# Request one node
-#SBATCH --nodes=1
-
-# Number of tasks per node
-#SBATCH --ntasks-per-node=16
-
-# Allocate one core per task
-#SBATCH --cpus-per-task=1
-
-# Maximum runtime
-#SBATCH --time=01:00:00 	
-
-# Job and output file name
-#SBATCH --job-name=bad_code
-#SBATCH --output=bad_code.out
+module load python
+module load mpi
 
 # Exit immediately on errors, undefined variables, or pipeline failures
 set -euo pipefail
 
-badcode = "bad_code.py"
+badcode="bad_code.py"
 
 # Print python version
 echo "------------------------------------"
@@ -33,10 +23,10 @@ echo "Python Version: $(python3 --version)"
 echo "------------------------------------"
 
 # N value as defined in bad_code.py
-N = 100000000
+N=100000000
 
 # List of MPI process numbers
-NPROCS = "1 2 4 8 16"
+NPROCS="1 2 4 8 16"
 
 # Table headings
 echo "--------------------------------"
