@@ -45,7 +45,7 @@ if comm.Get_rank() == 0:
   for i in range(1, nproc):
     comm.send(-1.0, dest=i)
 
-  print("Integral %.10f" % I)
+  print("Integral %.14f" % I)
 
 else:
 
