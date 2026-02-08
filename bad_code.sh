@@ -7,13 +7,14 @@
 #SBATCH --cpus-per-task=1           # Allocate one core per task
 #SBATCH --time=01:00:00             # Maximum runtime	
 #SBATCH --job-name=bad_code         # Job name
-#SBATCH --output=bad_code.out    # Output file name
+#SBATCH --output=bad_code.out       # Output file name
 
 # Exit immediately on errors, undefined variables, or pipeline failures
 set -euo pipefail
 
-# Print python version
+# Print python version and node
 echo "------------------------------------"
+echo "Running on: $(hostname)             "
 echo "Python Version: $(python3 --version)"
 echo "------------------------------------"
 
@@ -24,8 +25,8 @@ N=100000000
 NPROCS="1 2 4 8 16"
 
 # Table headings
-echo "--------------------------------"
-echo "P     N     Time(s)     Integral"
+echo "--------------------------------------------"
+echo "P    N           Time(s)   Integral"
 echo
 
 # Loop through different MPI process counts
@@ -33,16 +34,18 @@ for P in $NPROCS; do
 	
 	export N=$N
 	
-	# Runs program and measures runtime
+	SECONDS=0
+	
+	# Runs program
 	RESULT=$(mpirun -np "$P" python3 bad_code.py 2>&1)
 	
-	# Extract the last line of "RESULT" (runtime in seconds)
-	TIME=$(echo "$RESULT" | tail -n 1)
+	# Time taken for calculation
+	TIME=$SECONDS
 	
 	# Find line containing "Intergral" in RESULT and extract result
-	INTEGRAL=$(echo "$RESULT" | grep Integral | awk '{print $2}')
+	INTEGRAL=$(echo "$RESULT" | awk '/Integral/{printf "%.15f", $2}')
 
 	#Print results and align with table headings
-	printf "%-8s %-11s %-12s %-10s\n" "$P" "$N" "$TIME" "$INTEGRAL"
+	printf "%-4d %-11d %-9.2f %-15s\n" "$P" "$N" "$TIME" "$INTEGRAL"
 
 done
