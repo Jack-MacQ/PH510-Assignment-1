@@ -5,7 +5,7 @@
 #SBATCH --nodes=1                   # Request one node
 #SBATCH --ntasks-per-node=16        # Number of tasks per node
 #SBATCH --cpus-per-task=1           # Allocate one core per task
-#SBATCH --time=01:00:00             # Maximum runtime	
+#SBATCH --time=24:00:00             # Maximum runtime	
 #SBATCH --job-name=bad_code         # Job name
 #SBATCH --output=bad_code.out       # Output file name
 
@@ -43,9 +43,9 @@ for P in $NPROCS; do
 	TIME=$SECONDS
 	
 	# Find line containing "Intergral" in RESULT and extract result
-	INTEGRAL=$(echo "$RESULT" | awk '/Integral/{printf "%.15f", $2}')
+	INTEGRAL=$(echo "$RESULT" | awk '/Integral/{printf "%.14f", $2}')
 
 	#Print results and align with table headings
-	printf "%-4d %-11d %-9.2f %-15s\n" "$P" "$N" "$TIME" "$INTEGRAL"
+	printf "%-4d %-11d %-9.2f %-1s\n" "$P" "$N" "$TIME" "$INTEGRAL"
 
 done
