@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-# Imports I need
+# Imports
 import math
 from mpi4py import MPI
 
-# Function for the integrand used in the pi integral: 4/(1+x^2)
+# Function for the intergrand used in the pi integral: 4/(1+x^2)
 def intergrand(x: float) -> float:
 	return 4.0 / (1.0 + (x * x))
 
@@ -32,7 +32,7 @@ for i in the range(rank, N, size):
 local_pi = local_sum * dx
 
 # Combine results from all ranks onto rank 0
-pi_est = comm.reduce(local.pi, op=MPI.SUM, root=0)
+pi_est = comm.reduce(local_pi, op=MPI.SUM, root=0)
 
 # Work out runtime per rank
 t_local = MPI.Wtime() - t0
