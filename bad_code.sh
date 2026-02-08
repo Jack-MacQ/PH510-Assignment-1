@@ -34,13 +34,17 @@ for P in $NPROCS; do
 	
 	export N=$N
 	
-	SECONDS=0
+	# Start Timing
+	START=$(date +%s.%N)
 	
 	# Runs program
 	RESULT=$(mpirun -np "$P" python3 bad_code.py 2>&1)
 	
+	# End Timing
+	END=$(date +%s.%N)
+	
 	# Time taken for calculation
-	TIME=$SECONDS
+	TIME=$(echo "$END - $START" | bc)
 	
 	# Find line containing "Intergral" in RESULT and extract result
 	INTEGRAL=$(echo "$RESULT" | awk '/Integral/{printf "%.14f", $2}')
