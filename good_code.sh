@@ -9,12 +9,15 @@
 #SBATCH --job-name=good_code        # Job name
 #SBATCH --output=good_code.out      # Output file name
 
+module load mpi
+
 # Exit immediately on errors, undefined variables, or pipeline failures
 set -euo pipefail
 
 # Print python version and node
 echo "------------------------------------"
 echo "Running on: $(hostname)             "
+echo "License: MIT                        "
 echo "Python Version: $(python3 --version)"
 echo "------------------------------------"
 
