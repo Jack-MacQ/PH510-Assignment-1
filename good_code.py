@@ -68,7 +68,7 @@ def main() -> None:
     # Only rank 0 prints final result
     if rank == 0:
         err = abs(pi_est - math.pi)     # Deviation from true pi value
-        print(f"{size:<4d} {pi_est:19.14f} {err:<14.3e} {t_max:<12.6f}")
+        print(f"{size:<4d} {pi_est:19.14f} {err:<14.3e} {t_max:<12.2f}")
 
 if __name__ == "__main__":
     main()
