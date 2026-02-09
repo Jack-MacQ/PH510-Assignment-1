@@ -9,6 +9,8 @@
 #SBATCH --job-name=bad_code         # Job name
 #SBATCH --output=bad_code.out       # Output file name
 
+module load mpi
+
 # Exit immediately on errors, undefined variables, or pipeline failures
 set -euo pipefail
 
@@ -18,15 +20,18 @@ echo "Running on: $(hostname)             "
 echo "Python Version: $(python3 --version)"
 echo "------------------------------------"
 
+echo
 # N value
 N=100000000
+echo "N = $N"
+echo
 
 # List of MPI process numbers
 NPROCS="1 2 4 8 16"
 
 # Table headings
-echo "--------------------------------------------"
-echo "P    N           Time(s)   Integral"
+echo "-------------------------------"
+echo "P    Time(s)   Integral"
 echo
 
 # Loop through different MPI process counts
@@ -50,6 +55,6 @@ for P in $NPROCS; do
 	INTEGRAL=$(echo "$RESULT" | awk '/Integral/{printf "%.14f", $2}')
 
 	#Print results and align with table headings
-	printf "%-4d %-11d %-9.2f %-1s\n" "$P" "$N" "$TIME" "$INTEGRAL"
+	printf "%-4d %-9.2f %-1s\n" "$P" "$TIME" "$INTEGRAL"
 
 done
