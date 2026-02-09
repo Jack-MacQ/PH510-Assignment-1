@@ -29,8 +29,8 @@ echo
 # List of MPI process numbers
 NPROCS="1 2 4 8 16"
 
-echo "-------------------------------------------------"
-echo "Ranks   Pi               Error          Time (s) "
+echo "------------------------------------------------"
+echo "Ranks   Pi               Error          Time (s)"
 
 # Loop through different MPI process counts
 for P in $NPROCS; do
