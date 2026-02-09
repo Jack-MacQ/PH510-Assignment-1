@@ -23,10 +23,17 @@ t0 = MPI.Wtime()     # Start timing
 # Each rank builds its own partial sum
 local_sum = 0.0
 
+# Store values for fsum later
+terms = []
+append = terms.append     
+
 # Split the work across ranks, each rank does every "size" interval starting from its rank number
 for i in range(rank, N, size):
 	x_mid = (i + 0.5) * dx             # Midpoint
-	local_sum += intergrand(x_mid)     # Add contribution to local integral
+	append(intergrand(x_mid))
+
+# Sum using float summation to improve accuracy
+local_sum = math.fsum(terms)
 
 # Multiply by dx so this becomes the actual integral from this rank
 local_pi = local_sum * dx
