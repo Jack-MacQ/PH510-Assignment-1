@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 
-"""MPI midpoint-rule estimation of pi using integration"""
+"""MPI midpoint-rule estimation of pi using integration
+
+License: MIT
+
+Output:
+    Table showing:
+    - number of ranks
+    - pi results calculated
+    - error vs math.pi
+    - runtime
+
+Designed to improve calculation speed and accuracy with parallelisation
+
+"""
 
 # Imports
 import math
